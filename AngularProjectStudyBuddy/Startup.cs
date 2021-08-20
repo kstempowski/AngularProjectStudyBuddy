@@ -1,7 +1,9 @@
+using AngularProjectStudyBuddy.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,6 +12,7 @@ namespace AngularProjectStudyBuddy
 {
     public class Startup
     {
+        string connection = "Server=.\\SQLExpress;Database=StudyBuddyDB;Trusted_Connection=True;ConnectRetryCount=0;";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -20,6 +23,8 @@ namespace AngularProjectStudyBuddy
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<StudyBuddyDBContext>(options => options.UseSqlServer(connection));
+
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
