@@ -10,10 +10,10 @@ namespace AngularProjectStudyBuddy.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FavoritesController : ControllerBase
+    public class FavoriteController : ControllerBase
     {
         private readonly StudyBuddyDBContext _context;
-        public FavoritesController(StudyBuddyDBContext context)
+        public FavoriteController(StudyBuddyDBContext context)
         {
             _context = context;
         }
@@ -31,7 +31,6 @@ namespace AngularProjectStudyBuddy.Controllers
             {
                 return NotFound();
             }
-
         }
     }
 }

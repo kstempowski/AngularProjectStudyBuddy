@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AngularProjectStudyBuddy.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class StudyBuddyController : ControllerBase
     {
@@ -22,16 +22,16 @@ namespace AngularProjectStudyBuddy.Controllers
 
         #region Get/Read
         //GET: api/StudyBuddy
-        [HttpGet]
+        [HttpGet("getallquestions")]
         public async Task<ActionResult<List<QandA>>> GetAllQandA()
         {
             var questions = await _context.QandAs.ToListAsync();
             return questions;
         }
 
-        
+
         //GET: api/StudyBuddy/{Qid}
-        [HttpGet("{Qid}")]
+        [HttpGet("getquestion/{Qid}")]
         public async Task<ActionResult<QandA>> GetQandA(int Qid)
         {
             var question = await _context.QandAs.FindAsync(Qid);
@@ -47,14 +47,22 @@ namespace AngularProjectStudyBuddy.Controllers
         }
 
         //GET: api/StudyBuddy/favorite/{UserName}
-        [HttpGet("{UserName}")]
-        public async Task<ActionResult<Favorite>> GetFavorites(string UserName)
+        [HttpGet("getuser/{UserName}")]
+        public async Task<ActionResult<List<QandA>>> GetFavorites(string UserName)
         {
-            var favorites = await _context.Favorites.FindAsync(UserName);
-
-            if (favorites.UserName == UserName)
+            //attempting to join in C#
+            //var x = await (from u in _context.Favorites join i in _context.QandAs on u.Qid equals i.Qid where u.UserName.Contains(UserName) select new {Qid = i.Qid, UserName = u.UserName, qs = i.Question } ).ToListAsync();
+            var favorites = await _context.Favorites.Where(x => x.UserName == UserName).ToListAsync();
+            var userQA = new List<QandA>();
+            foreach (var a in favorites)
             {
-                return favorites;
+                userQA.Add(await _context.QandAs.Where(x => x.Qid == a.Qid).FirstAsync());
+
+            }
+            
+            if (userQA != null)
+            {
+                return userQA;
             }
             else
             {
@@ -65,7 +73,7 @@ namespace AngularProjectStudyBuddy.Controllers
 
         #region Create/Post/Add
         //POST api/StudyBuddy
-        [HttpPost]
+        [HttpPost("addquestion")]
         public async Task<ActionResult<QandA>> AddQandA(QandA question)
         {
             _context.QandAs.Add(question);
@@ -77,7 +85,7 @@ namespace AngularProjectStudyBuddy.Controllers
 
         #region Delete
         //DELETE api/StudyBuddy/{Qid}
-        [HttpDelete("{Qid}")]
+        [HttpDelete("deletequestion/{Qid}")]
         public async Task<ActionResult<QandA>> DeleteQandA(int Qid)
         {
             var question = await _context.QandAs.FindAsync(Qid);
