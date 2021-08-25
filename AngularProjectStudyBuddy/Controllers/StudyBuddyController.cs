@@ -45,22 +45,6 @@ namespace AngularProjectStudyBuddy.Controllers
             }
 
         }
-
-        //GET: api/StudyBuddy/favorite/{UserName}
-        [HttpGet("{UserName}")]
-        public async Task<ActionResult<Favorite>> GetFavorites(string UserName)
-        {
-            var favorites = await _context.Favorites.FindAsync(UserName);
-
-            if (favorites.UserName == UserName)
-            {
-                return favorites;
-            }
-            else
-            {
-                return NotFound();
-            }
-        }
         #endregion
 
         #region Create/Post/Add
