@@ -60,7 +60,7 @@ namespace AngularProjectStudyBuddy.Controllers
 
             }
             
-            if (userQA != null)
+            if (userQA.Count > 0)
             {
                 return userQA;
             }
